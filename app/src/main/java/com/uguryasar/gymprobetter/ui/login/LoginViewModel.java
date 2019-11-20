@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import android.util.Log;
 import android.util.Patterns;
 
 import com.uguryasar.gymprobetter.data.LoginRepository;
@@ -41,12 +42,16 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    public void loginDataChanged(String username, String password) {
+    public void loginDataChanged(String username, String password, String gymName) {
         if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
+            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null, null));
         } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
+            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password, null));
+        } else if (!isGymNameValid(gymName)) {
+            Log.i("Data valid", "gymName: " + gymName);
+            loginFormState.setValue(new LoginFormState(null, null, R.string.invalid_gymName));
         } else {
+            Log.i("Data valid", "true");
             loginFormState.setValue(new LoginFormState(true));
         }
     }
@@ -67,4 +72,10 @@ public class LoginViewModel extends ViewModel {
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }
+
+    // A placeholder gymName validation check
+    private boolean isGymNameValid(String gymName) {
+        return gymName != null && gymName.trim().length() > 3;
+    }
+
 }
